@@ -1,4 +1,13 @@
 {
-    "memo": "",
-    "projects": []
+    "memo": "df487b6b47faf4ddb9b6d8d37846543a73e331b93826d9e8b71fc9b832ac1a44",
+    "projects": [
+        {
+            "name": "github.com/julienschmidt/httprouter",
+            "version": "v1.1",
+            "revision": "8c199fb6259ffc1af525cc3ad52ee60ba8359669",
+            "packages": [
+                "."
+            ]
+        }
+    ]
 }

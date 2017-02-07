@@ -2,24 +2,35 @@ package main
 
 import (
 	"bytes"
+	"html/template"
 	"io"
 	"log"
 	"regexp"
 )
 
 var (
-	SCAN_SIZE = 8192
-	INJECT_RE = regexp.MustCompile(`(?i)<html[\s>]|<head[\s>]|(<[a-z\/])`)
+	SCAN_SIZE  = 8192
+	INJECT_RE  = regexp.MustCompile(`(?i)<html[\s>]|<head[\s>]|(<[a-z\/])`)
+	INJECT_TPL = template.Must(template.ParseFiles("inject.html"))
 )
 
-func Inject(src io.ReadCloser, payload []byte) io.ReadCloser {
+type TemplateData struct {
+	URL string
+}
+
+func Inject(url string, src io.ReadCloser) io.ReadCloser {
 	buf := make([]byte, SCAN_SIZE)
 	_, err := src.Read(buf)
 	if err != nil && err != io.EOF {
 		log.Fatalln(err)
 	}
 
-	result := inject(buf, payload)
+	payload := &bytes.Buffer{}
+	INJECT_TPL.Execute(payload, TemplateData{
+		URL: url,
+	})
+
+	result := inject(buf, payload.Bytes())
 	return struct {
 		io.Reader
 		io.Closer
