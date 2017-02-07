@@ -1,0 +1,16 @@
+injecture
+=========
+
+A rewriting proxy prototype.
+
+Usage
+-----
+
+    go get -u github.com/golang/dep/...
+    dep ensure
+    go build
+    ./injecture
+
+Visit, for example: http://localhost:8080/https://en.wikipedia.org/wiki/Convair_B-58_Hustler
+
+There's a lot missing from this at the moment, most noticeably redirect handling.
