@@ -12,6 +12,27 @@ type RewritingTransport struct {
 	transport http.RoundTripper
 }
 
+var request_header_blacklist = [...]string{
+	// Passing CF headers on to via causes "Error 1000: DNS points to
+	// prohibited IP" errors at CloudFlare, so we have to strip them out
+	// here.
+	"CF-Connecting-IP",
+	"CF-Ray",
+	"CF-Visitor",
+	"CF-Ipcountry",
+
+	// Generic HTTP auth headers
+	"Authorization",
+	"Cookie",
+
+	// h CSRF token header
+	"X-Csrf-Token",
+
+	// FIXME: For now just disable gzip responses. In future it would be
+	// nice to handle this transparently.
+	"Accept-Encoding",
+}
+
 func (r *RewritingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	if r.transport == nil {
 		r.transport = http.DefaultTransport
@@ -57,9 +78,9 @@ func RewriteRequest(req *http.Request) {
 	req.URL.Path = targetURL.Path
 	req.URL.RawQuery = targetURL.RawQuery
 
-	// FIXME: For now just disable gzip responses. In future it would be
-	// nice to handle this transparently.
-	req.Header.Del("Accept-Encoding")
+	for _, header := range request_header_blacklist {
+		req.Header.Del(header)
+	}
 }
 
 var DefaultProxy = &httputil.ReverseProxy{
