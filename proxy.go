@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 )
 
 type RewritingTransport struct {
@@ -98,6 +99,13 @@ func RewriteResponse(res *http.Response) error {
 	for _, header := range response_header_blacklist {
 		res.Header.Del(header)
 	}
+
+	location, _ := res.Location()
+	if location != nil {
+		newLocation := os.Getenv("HEROKU_URL") + "/" + location.String()
+		res.Header.Set("Location", newLocation)
+	}
+
 	return nil
 }
 
