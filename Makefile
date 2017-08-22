@@ -10,3 +10,7 @@ build:
 .PHONY: dev
 dev: build
 	@./injecture
+
+.PHONY: docker
+docker:
+	git archive HEAD | docker build -t injecture:dev -
