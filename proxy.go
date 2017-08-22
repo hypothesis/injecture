@@ -7,6 +7,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strings"
 )
 
 type RewritingTransport struct {
@@ -72,6 +73,11 @@ func RewriteRequest(req *http.Request) {
 	// The requested URL is assumed to be everything following the initial
 	// slash of the path.
 	target := req.RequestURI[1:]
+	// If the request is a passthrough request (/_/http...) then we need to
+	// cut the underscore prefix.
+	if strings.HasPrefix(target, "_/") {
+		target = target[2:]
+	}
 	// If we can't parse the request as a URL, then we won't try and proxy it.
 	targetURL, err := url.ParseRequestURI(target)
 	if err != nil {
@@ -104,13 +110,16 @@ func RewriteResponse(res *http.Response) error {
 	if location != nil {
 		newLocation := os.Getenv("HEROKU_URL") + "/" + location.String()
 		res.Header.Set("Location", newLocation)
+		return nil
 	}
 
 	return nil
 }
 
-var DefaultProxy = &httputil.ReverseProxy{
+var RewriteProxy = &httputil.ReverseProxy{
 	Director:       RewriteRequest,
 	Transport:      &RewritingTransport{},
 	ModifyResponse: RewriteResponse,
 }
+
+var PassthroughProxy = &httputil.ReverseProxy{Director: RewriteRequest}

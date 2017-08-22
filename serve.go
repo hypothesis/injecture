@@ -22,12 +22,22 @@ func Fallthrough(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if strings.HasPrefix(path, "/_/http://") || strings.HasPrefix(path, "/_/https://") {
+		Passthrough(w, r)
+		return
+	}
+
 	http.NotFound(w, r)
 }
 
-// Handle a proxy request
+// Handle a rewriting proxy request
 func Proxy(w http.ResponseWriter, r *http.Request) {
-	DefaultProxy.ServeHTTP(w, r)
+	RewriteProxy.ServeHTTP(w, r)
+}
+
+// Handle a passthrough proxy request
+func Passthrough(w http.ResponseWriter, r *http.Request) {
+	PassthroughProxy.ServeHTTP(w, r)
 }
 
 func main() {
