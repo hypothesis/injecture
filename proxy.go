@@ -85,6 +85,13 @@ func RewriteRequest(req *http.Request) {
 	for _, header := range request_header_blacklist {
 		req.Header.Del(header)
 	}
+
+	userAgent := req.Header.Get("User-Agent")
+	if userAgent != "" {
+		userAgent += " "
+	}
+	userAgent += "Hypothesis-Via"
+	req.Header.Set("User-Agent", userAgent)
 }
 
 func RewriteResponse(res *http.Response) error {
