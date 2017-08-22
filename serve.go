@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
@@ -29,10 +31,13 @@ func Proxy(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	fmt.Println("Config HEROKU_URL: ", os.Getenv("HEROKU_URL"))
+	fmt.Println("Config PORT: ", os.Getenv("PORT"))
+
 	router := httprouter.New()
 	router.Handler("GET", "/", Static)
 	router.Handler("GET", "/assets/*path", Static)
 	router.NotFound = http.HandlerFunc(Fallthrough)
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", router))
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+os.Getenv("PORT"), router))
 }
