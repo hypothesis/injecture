@@ -5,11 +5,15 @@ export PORT
 
 .PHONY: build
 build:
-	@go build .
+	go build .
 
 .PHONY: dev
 dev: build
-	@./injecture
+	./injecture
+
+.PHONY: watch
+watch:
+	PORT=8081 gin -a 8081 -p 8080
 
 .PHONY: docker
 docker:
