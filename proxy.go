@@ -33,6 +33,10 @@ var request_header_blacklist = [...]string{
 	"Accept-Encoding",
 }
 
+var response_header_blacklist = [...]string{
+	"Set-Cookie",
+}
+
 func (r *RewritingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	if r.transport == nil {
 		r.transport = http.DefaultTransport
@@ -83,7 +87,15 @@ func RewriteRequest(req *http.Request) {
 	}
 }
 
+func RewriteResponse(res *http.Response) error {
+	for _, header := range response_header_blacklist {
+		res.Header.Del(header)
+	}
+	return nil
+}
+
 var DefaultProxy = &httputil.ReverseProxy{
-	Director:  RewriteRequest,
-	Transport: &RewritingTransport{},
+	Director:       RewriteRequest,
+	Transport:      &RewritingTransport{},
+	ModifyResponse: RewriteResponse,
 }
