@@ -60,6 +60,15 @@ func (r *RewritingTransport) RoundTrip(req *http.Request) (*http.Response, error
 		return res, nil
 	}
 
+	// If origin request is http, then we need to rewrite asset urls in response
+	if req.URL.Scheme == "http" {
+		body, err := RewriteInsecureURLs(res.Body)
+		if err != nil {
+			log.Fatalf("ERROR: couldn't rewrite insecure URLs %v\n", err)
+		}
+		res.Body = body
+	}
+
 	// OK, inject...
 	res.Body = Inject(req.RequestURI[1:], res.Body)
 

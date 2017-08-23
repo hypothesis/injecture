@@ -7,9 +7,15 @@
   revision = "8c199fb6259ffc1af525cc3ad52ee60ba8359669"
   version = "v1.1"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["html","html/atom"]
+  revision = "1c05540f6879653db88113bc4a2b70aec4bd491f"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "59de32be4f2bbe73f4cedb526c7cc61b1ece6defba7c75990dfbffa4656282ea"
+  inputs-digest = "2e42f91a1186eba3daf7b57c698f0ff99a7af21db2d3d0d1b9b559b979d63b12"
   solver-name = "gps-cdcl"
   solver-version = 1
