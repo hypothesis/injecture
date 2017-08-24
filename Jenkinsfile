@@ -24,4 +24,11 @@ if (env.BRANCH_NAME == 'develop') {
     stage('qa deploy') {
         deployApp(image: img, app: 'injecture', env: 'qa')
     }
+
+    milestone()
+    stage('prod deploy') {
+        input(message: "Deploy to prod?")
+        milestone()
+        deployApp(image: img, app: 'injecture', env: 'prod')
+    }
 }
