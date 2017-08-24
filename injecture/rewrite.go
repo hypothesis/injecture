@@ -79,7 +79,7 @@ func rewriteLinkStylesheet(token *html.Token) {
 		if strings.HasPrefix(val, "//") {
 			val = "https:" + val
 		}
-		val = os.Getenv("HEROKU_URL") + "/" + val
+		val = os.Getenv("APP_URL") + "/" + val
 
 		href.Val = val
 		rewrittenAttr = append(rewrittenAttr, href)
@@ -98,7 +98,7 @@ func rewriteScriptSrc(token *html.Token) {
 			if strings.HasPrefix(val, "//") {
 				val = "https:" + val
 			}
-			val = os.Getenv("HEROKU_URL") + "/" + val
+			val = os.Getenv("APP_URL") + "/" + val
 			attr.Val = val
 			rewrittenAttr = append(rewrittenAttr, attr)
 		default:

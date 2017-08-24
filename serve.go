@@ -42,7 +42,7 @@ func Passthrough(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("Config HEROKU_URL: ", os.Getenv("HEROKU_URL"))
+	fmt.Println("Config APP_URL: ", os.Getenv("APP_URL"))
 	fmt.Println("Config PORT: ", os.Getenv("PORT"))
 
 	router := httprouter.New()

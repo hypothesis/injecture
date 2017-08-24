@@ -117,7 +117,7 @@ func RewriteResponse(res *http.Response) error {
 
 	location, _ := res.Location()
 	if location != nil {
-		newLocation := os.Getenv("HEROKU_URL") + "/" + location.String()
+		newLocation := os.Getenv("APP_URL") + "/" + location.String()
 		res.Header.Set("Location", newLocation)
 		return nil
 	}
