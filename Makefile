@@ -5,11 +5,11 @@ export PORT
 
 .PHONY: build
 build:
-	go build .
+	go build -o injecture-web .
 
 .PHONY: dev
 dev: build
-	./injecture
+	./injecture-web
 
 .PHONY: watch
 watch:

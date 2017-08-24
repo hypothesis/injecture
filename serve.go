@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/hypothesis/injecture/injecture"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -32,12 +33,12 @@ func Fallthrough(w http.ResponseWriter, r *http.Request) {
 
 // Handle a rewriting proxy request
 func Proxy(w http.ResponseWriter, r *http.Request) {
-	RewriteProxy.ServeHTTP(w, r)
+	injecture.RewriteProxy.ServeHTTP(w, r)
 }
 
 // Handle a passthrough proxy request
 func Passthrough(w http.ResponseWriter, r *http.Request) {
-	PassthroughProxy.ServeHTTP(w, r)
+	injecture.PassthroughProxy.ServeHTTP(w, r)
 }
 
 func main() {

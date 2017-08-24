@@ -1,4 +1,4 @@
-package main
+package injecture
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 var (
 	SCAN_SIZE  = 8192
 	INJECT_RE  = regexp.MustCompile(`(?i)<html[\s>]|<head[\s>]|(<[a-z\/])`)
-	INJECT_TPL = template.Must(template.ParseFiles("inject.html"))
+	INJECT_TPL = template.Must(template.ParseFiles("injecture/inject.html"))
 )
 
 type TemplateData struct {
